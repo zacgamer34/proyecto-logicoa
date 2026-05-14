@@ -1,0 +1,16 @@
+Nombre              |   ID_Cliente
+Ana María Pérez	    |   1023456789
+Juan Carlos Gómez	|   98765432
+Laura Sánchez	    |   1112223334
+Pedro Ramírez	    |   79654321
+Camila Torres	    |   1234567890
+Andrés Martínez	    |   1098765432
+Sofía Herrera	    |   1456789012
+Diego Morales	    |   12345678
+Valentina Castro	|   1567890123
+Nicolás Rojas	    |   10234567
+Mariana López	    |   1345678901
+Felipe Navarro	    |   45678901
+Gabriela Ruiz	    |   1678901234
+Daniela Vega	    |   23456789
+Santiago Romero	    |   1789012345

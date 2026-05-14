@@ -1,0 +1,4 @@
+Ubicacion (Fila)  |   Categoria   |   Precio
+1 - 4             |   VIP         |  COP 220.000 
+5 - 10            |   Platino     |  COP 140.000
+11 - 18           |   General     |  COP 75.000
