@@ -15,33 +15,40 @@ try:
     nombre=""
     usuariosSeparados=""
     contenido_clientes=""
+    nombreArchivo=""
+    idArchivo=""
+    validacionUsuario=bool
 #proceso
     while True:
-        
+        #el dato entra
         datosLogin=input("ingrese su nombre y su id[separados por: |]\n: ")
+        #se procesa
+        datosLoginSeparados=datosLogin.replace(" ","").replace("\t","").replace("\n","").split("|")
+        
+        nombre=datosLoginSeparados[0]
+        id=datosLoginSeparados[1]
         
         
-        
+        #abrimos el archivo y lo leemos
         archivoUsuarios=open("recursos/clientes.txt", "r")
-        
-        contenido_clientes=archivoUsuarios.readline()
-        
-        
-        
-        for usuario in archivoUsuarios:
+        archivoUsuarios.readline()
+        validacionUsuario=False
+        #entra al ciclo y se separa
+        for login in archivoUsuarios:
+            contenido_clientes=login.replace("\t","").replace(" ","").replace("\n","").split("|")
             
-            datosLoginSeparados=datosLogin.strip().split("|")
-            nombre=datosLoginSeparados[0]
-            if nombre==usuario:
-                for cicloID in archivoUsuarios[1]:
-                    id=datosLoginSeparados[1]
-                if id==cicloID:
-                    print(f"bienvenido:{nombre} con identificacion:{id}")
-                
+            nombreArchivo=contenido_clientes[0]
+            idArchivo=contenido_clientes[1]
             
+            if nombre==nombreArchivo and id==idArchivo:
+                print(f"bienvenido:{nombre}")
+                validacionUsuario=True
+                break
         
+        if not validacionUsuario:
+            print("usuario o id invalidos")
     
-    archivoUsuarios.close()
+    
 
 except Exception as e:
     print(F"error general del sistema->{e}")
