@@ -71,8 +71,11 @@ try:
             
         
         if eventos==1:
-            datosEvento=open()
-            
+            datosEvento=open("recursos/mapa_evento[EVT-1001].txt", "r")
+        elif eventos==2:
+            datosEvento=open("recursos/mapa_evento[EVT-1002].txt", "r")
+        elif eventos==3:
+            datosEvento=open("recursos/mapa_evento[EVT-1003].txt", "r")
 
 except Exception as e:
     print(F"error general del sistema->{e}")
@@ -80,3 +83,4 @@ except Exception as e:
 finally:
     archivoUsuarios.close
     archivoEventos.close
+    datosEvento.close
