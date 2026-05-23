@@ -25,9 +25,9 @@ try:
 #proceso
     
         #el dato entra
-    datosLogin=input("ingrese su nombre y su id[separados por: |]\n: ")
+    datosLogin = input("Ingrese su ID\n: ")
         #se procesa
-    datosLoginSeparados=datosLogin.replace(" ","").replace("\t","").replace("\n","").split("|")
+    datosLoginSeparados = datosLogin.replace(" ","").replace("\t","").replace("\n","").split("|")
         
     nombre=datosLoginSeparados[0]
     id=datosLoginSeparados[1]
