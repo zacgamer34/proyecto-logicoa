@@ -1,4 +1,3 @@
-Nombre                      |   ID_Evento   |   Tipo de Evento  |   Ciudad      |   Fecha    |   Hora   
-Copa Medellín 2026          | EVT-1001      | Deporte           | Medellín      | 2026-06-12 | 08:00 
-Noche de Teatro Caribe      | EVT-1002      | Teatro            | Barranquilla  | 2026-06-15 | 19:30 
-Concierto Sinfonía Urbana   | EVT-1003      | Concierto         | Bogotá        | 2026-06-20 | 21:00 
+EVT-1001,Copa Medellin 2026,Deporte,Medellin,2026-06-12,08:00
+EVT-1002,Noche de Teatro Caribe,Teatro,Barranquilla,2026-06-15,19:30
+EVT-1003,Concierto Sinfonia Urbana,Concierto,Bogota,2026-06-20,21:00

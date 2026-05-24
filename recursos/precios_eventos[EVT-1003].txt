@@ -1,3 +1,2 @@
-Cupos  |   Categoria   |   Precio
-20     |   VIP         |  COP 250.000 
-30     |   General     |  COP 95.000
+VIP,200,500
+General,300,120
