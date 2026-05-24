@@ -14,7 +14,7 @@ def cargar_clientes():
             partes = linea.split(",")
             if len(partes) == 2:
                 id_cliente = partes[0].strip()
-                nombre     = partes[1].strip()
+                nombre     = partes[1].strip() #Manejo por listas 
                 clientes[id_cliente] = nombre
 
         archivo.close()
@@ -37,7 +37,7 @@ def cargar_eventos():
                 evento = {
                     "id" : partes[0].strip(),
                     "nombre" : partes[1].strip(),
-                    "tipo" : partes[2].strip(),
+                    "tipo" : partes[2].strip(),    # Manejo por diccionario
                     "ciudad" : partes[3].strip(),
                     "fecha" : partes[4].strip(),
                     "hora" : partes[5].strip()
