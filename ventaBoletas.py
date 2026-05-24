@@ -22,7 +22,7 @@ def cargar_clientes():
     except FileNotFoundError as ffe:
         raise FileNotFoundError(f"Error no se encuentra el archivo clientes.txt - {ffe}")
     except Exception as e:
-        raise Exception(f"Error generico en la funcion division - {e}")
+        raise Exception(f"Error generico en la funcion cargar_clientes - {e}")
 
 def cargar_eventos():
     try:
@@ -48,7 +48,7 @@ def cargar_eventos():
     except FileNotFoundError as ffe:
         raise FileNotFoundError(f"Error no se encuentra el archivo clientes.txt - {ffe}")            
     except Exception as e:
-        raise Exception(f"Error generico en la funcion division - {e}")
+        raise Exception(f"Error generico en la funcion cargar_eventos - {e}")
     
 # LO QUE SE VA A VISUALIZAR
 
@@ -71,14 +71,16 @@ try:
     #variables adicionales
     clientes = ""
     eventos = ""
-    mensajeMenu = "\n====== MENU ======\n1: Ver eventos disponibles \n2: Comprar Boletas \n3: Salir \nElija una opcion: "
+    mensajeMenu = "\n1: Ver eventos disponibles \n2: Comprar Boletas \n3: Salir \nElija una opcion: "
     opcionMenu = 0
     evento_elegido = ""
-    
+    mensajeBienvenida=""
     # Proceso
-    print("============================================")
-    print("   BIENVENIDO AL SISTEMA DE VENTA BOLETAS  ")
-    print("============================================")
+    mensajeBienvenida+="============================================"
+    mensajeBienvenida+="          BIENVENIDO A EVENT.CO    "
+    mensajeBienvenida +="============================================"
+    
+    print
 
     # Cargar datos al arrancar
     clientes = cargar_clientes()
@@ -92,18 +94,22 @@ try:
         print("No hay eventos disponibles. Verifique eventos.txt")
         
     # LOGIN
+    while True:
         
-    id_ingreso = input("\nIngrese su ID de cliente: ").strip()
-        
-    if id_ingreso not in clientes:
-        print("Error: el ID " + id_ingreso + "no esta registrado.")
-        
-    nombre_cliente = clientes[id_ingreso]
-    print("\nBienvenido/a, " + nombre_cliente)
-    
+            id_ingreso = input("\nIngrese su ID de cliente: ").strip()
+
+            if id_ingreso not in clientes:
+                print("Error: el ID " + id_ingreso + "no esta registrado. \n porfavor vuelva a ingresarlo")
+                
+            else:
+                break
+            nombre_cliente = clientes[id_ingreso]
+            print("\nBienvenido/a, " + nombre_cliente)
+
+            
     while True:
         try:
-            
+            print("\n ===MENU=== \n")
             opcionMenu = int(input(mensajeMenu))
             if not (1 <= opcionMenu <= 4): 
                 raise ValueError("Valor fuera de rango")
@@ -148,7 +154,9 @@ try:
     #Cerrar documentos
     clientes.close()
     eventos.close()
-        
+
+except TypeError as Te:
+    print(f"error en los datos   -> {Te}")
 except Exception as e:
     print(f"Error generico -> {e}")
 else:
