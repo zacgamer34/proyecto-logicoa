@@ -77,10 +77,10 @@ try:
     mensajeBienvenida=""
     # Proceso
     mensajeBienvenida+="============================================"
-    mensajeBienvenida+="          BIENVENIDO A EVENT.CO    "
-    mensajeBienvenida +="============================================"
+    mensajeBienvenida+="\n          BIENVENIDO A EVENT.CO           "
+    mensajeBienvenida +="\n============================================"
     
-    print
+    print(mensajeBienvenida)
 
     # Cargar datos al arrancar
     clientes = cargar_clientes()
