@@ -3,6 +3,8 @@
 
 # CARGA DE ARCHIVOS
 
+# BLOQUE 1 - CARGA DE ARCHIVOS
+
 def cargar_clientes():
     try:
         clientes = {}
@@ -50,7 +52,7 @@ def cargar_eventos():
     except Exception as e:
         raise Exception(f"Error generico en la funcion cargar_eventos - {e}")
     
-# LO QUE SE VA A VISUALIZAR
+#BLOQUE 2 - FUNCIONES DE VISUALIZACION
 
 def mostrar_eventos(eventos):
         contador = 1
@@ -60,7 +62,167 @@ def mostrar_eventos(eventos):
             print(f"{contador}. [ {evento["id"]} ] {evento["nombre"] } | {evento["tipo"]} | {evento["ciudad"]} | {evento["fecha"]} | {evento["hora"]}")
             contador = contador + 1
         print("=================================")
-    
+        
+def cargar_precios_deporte():
+    try:
+        precios = []
+        archivo = open("recursos/precios_evento[EVT-1001].txt", "r")
+        for linea in archivo:
+            linea = linea.strip()
+            if linea == "":
+                continue
+            partes = linea.split(",")
+            if len(partes) == 3:
+                rango = partes[0].strip()          # ej: "1-3"
+                zona  = partes[1].strip()          # ej: "VIP"
+                precio = float(partes[2].strip())  # ej: 300.0
+
+                # separar el rango "inicio-fin"
+                extremos = rango.split("-")
+                inicio = int(extremos[0])
+                fin    = int(extremos[1])
+
+                # asignar el mismo precio a cada fila del rango
+                for num_fila in range(inicio, fin + 1):
+                    precios[num_fila] = {"zona": zona, "precio": precio}
+        archivo.close()
+        return precios
+    except FileNotFoundError as ffe:
+        print(f"Error no se encontro el archivo de precios - {ffe}")
+
+def cargar_precios_teatro():
+    try:
+        precios = []
+        archivo = open("recursos/precios_evento[EVT-1002].txt", "r")
+        for linea in archivo:
+            linea = linea.strip()
+            if linea == "":
+                continue
+            partes = linea.split(",")
+            if len(partes) == 3:
+                rango = partes[0].strip()          # ej: "1-3"
+                zona  = partes[1].strip()          # ej: "VIP"
+                precio = float(partes[2].strip())  # ej: 300.0
+
+                # separar el rango "inicio-fin"
+                extremos = rango.split("-")
+                inicio = int(extremos[0])
+                fin    = int(extremos[1])
+
+                # asignar el mismo precio a cada fila del rango
+                for num_fila in range(inicio, fin + 1):
+                    precios[num_fila] = {"zona": zona, "precio": precio}
+        archivo.close()
+        return precios 
+    except FileNotFoundError as ffe:
+        print(f"Error no se encontro el archivo de precios - {ffe}")
+        
+def cargar_precios_concierto():
+    try:
+        precios = []
+        archivo = open("recursos/precios_evento[EVT-1003].txt", "r")
+        for linea in archivo:
+            linea = linea.strip()
+            if linea == "":
+                continue
+            partes = linea.split(",")
+            if len(partes) == 3:
+                zona         = partes[0].strip()
+                cupos_totales = int(partes[1].strip())
+                precio        = float(partes[2].strip())
+                precios[zona] = {"cupos_totales": cupos_totales, "precio": precio}
+        archivo.close()
+        return precios 
+    except FileNotFoundError as ffe:
+        print(f"Error no se encontro el archivo de precios - {ffe}")
+        
+def cargar_mapa_deporte():
+    try:
+        mapa = []
+        archivo = open("recursos/mapa_evento[EVT-1001].txt", "r")
+        for linea in archivo:
+            linea = linea.strip()
+            if linea == "":
+                continue
+            celdas = linea.split(",")
+            fila = []
+            for celda in celdas:
+                fila.append(celda.strip())
+            mapa.append(fila)
+        archivo.close()
+        return mapa
+    except FileNotFoundError as ffe:
+        print(f"Error no se encontro el archivo de precios - {ffe}")
+
+def cargar_mapa_teatro():
+    try:
+        mapa = []
+        archivo = open("recursos/mapa_evento[EVT-1002].txt", "r")
+        for linea in archivo:
+            linea = linea.strip()
+            if linea == "":
+                continue
+            celdas = linea.split(",")
+            fila = []
+            for celda in celdas:
+                fila.append(celda.strip())
+            mapa.append(fila)
+        archivo.close()
+        return mapa
+    except FileNotFoundError as ffe:
+        print(f"Error no se encontro el archivo de precios - {ffe}")  
+
+def cargar_mapa_concierto():
+    try:
+        mapa = []
+        archivo = open("recursos/mapa_evento[EVT-1003].txt", "r")
+        for linea in archivo:
+            linea = linea.strip()
+            if linea == "":
+                continue
+            partes = linea.split(",")
+            if len(partes) == 2:
+                zona   = partes[0].strip()
+                cupos  = int(partes[1].strip())
+                mapa[zona] = cupos
+        archivo.close()
+        return mapa
+    except FileNotFoundError as ffe:
+        print(f"Error no se encontro el archivo de precios - {ffe}")
+        
+# BLOQUE 3 - GUARDAR / ACTUALIZAR ARCHIVOS
+        
+def guardar_factura(id_cliente, evento_id, boletas_compradas, total):
+    try:
+        nombre_archivo = "factura_" + id_cliente + "_" + evento_id + ".txt"
+        
+        archivo = open(nombre_archivo, "w")
+        archivo.write("==============================\n")
+        archivo.write("  FACTURA DE COMPRA\n")
+        archivo.write("==============================\n")
+        archivo.write("Cliente : " + id_cliente + "\n")
+        archivo.write("Evento  : " + evento_id  + "\n")
+        archivo.write("------------------------------\n")
+
+        for boleta in boletas_compradas:
+            archivo.write("Silla/Zona : " + boleta["silla"]        + "\n")
+            archivo.write("Zona       : " + boleta["zona"]         + "\n")
+            archivo.write("Costo base : $" + str(boleta["base"])   + "\n")
+            archivo.write("Servicio 8%: $" + str(boleta["servicio"]) + "\n")
+            archivo.write("------------------------------\n")
+
+        archivo.write("TOTAL      : $" + str(round(total, 2)) + "\n")
+        archivo.write("==============================\n")
+        archivo.close()
+        print(f"\nFactura guardada en: {nombre_archivo}")
+    except Exception as error:
+        print("ERROR al guardar la factura: " + str(error))
+        
+# BLOQUE 4 - CONTEO DE BOLETAS YA COMPRADAS POR CLIENTE
+# BLOQUE 5 - COMPRA TEATRO / DEPORTE
+# BLOQUE 6 - COMPRA CONCIERTO        
+# BLOQUE 7 - MODULO DE REPORTES (ADMINISTRADOR)
+
 # Apartado principal
 try:
     #datos de entrada
