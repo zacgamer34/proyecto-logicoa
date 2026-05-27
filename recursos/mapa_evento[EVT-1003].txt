@@ -1,2 +1,10 @@
-VIP,200
-General,300
+O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O
+O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O
+O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O
+O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O
+O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O
+O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O
+O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O
+O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O
+O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O
+O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O

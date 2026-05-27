@@ -1,5 +1,6 @@
 # Apartado importaciones
-# Apartado funciones
+# Apartado funciones:
+
 
 # CARGA DE ARCHIVOS
 
@@ -237,6 +238,11 @@ try:
     opcionMenu = 0
     evento_elegido = ""
     mensajeBienvenida=""
+    mapaxEvento=""
+    seleccionAsientos=""
+    listaLetras=["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T"]
+    cantidadSillas=""
+    id_silla=""
     # Proceso
     mensajeBienvenida+="============================================"
     mensajeBienvenida+="\n          BIENVENIDO A EVENT.CO           "
@@ -257,7 +263,7 @@ try:
         
     # LOGIN
     while True:
-        
+    
             id_ingreso = input("\nIngrese su ID de cliente: ").strip()
 
             if id_ingreso not in clientes:
@@ -301,9 +307,44 @@ try:
             # redirigir segun el tipo de evento
             tipo = evento_elegido["tipo"]
             if tipo == "Teatro" or tipo == "Deporte":
-                pass
+                if tipo== "Teatro":
+                    print("asientos disponibles en teatro ")
+                    mapaxEvento=cargar_mapa_teatro()
+                    print(mapaxEvento)
+                    
+                    print("\n| x = ocupado|| 0= libre|\n")
+                    
+                elif tipo=="Deporte":
+                    print("asientos disponibles en Deporte")
+                    mapaxEvento=cargar_mapa_deporte()
+                    print(mapaxEvento)
+                    print("\n| x = ocupado|| 0= libre|\n")
+                
+                
             elif tipo == "Concierto":
-                pass
+                print("asientos disponibles en Concierto")
+                mapaxEvento=cargar_precios_concierto()
+                print(mapaxEvento)
+                print("\n| x = ocupado|----| 0= libre|\n")
+                #entrada del dato selecion de sillas
+                while True:
+                    try:
+                        cantidadSillas=int(input("ingrese la cantidad de sillas que desea escojer"))
+                        if not(cantidadSillas>0): raise TypeError("numero ingresado invalido")
+                        else:break
+                    except TypeError as Te:
+                        print(f"error en los datos   -> {Te}")
+                        continue
+                #validacion de la cantidad de asintos
+                while True:
+                    try:
+                        id_silla=idAsiento=input(f"ingrese que asientos desea\n|selecionar asi Numero-LetraIDentificadora|\n|despues de selecionar uno serpar la selecion con (,)|\nletras->{listaLetras}\nnumeros[1-10]\n:").upper()
+                        asientoSeparado=idAsiento.split(",")
+                        if not(len(asientoSeparado)==cantidadSillas): raise ValueError("los asientos selecionado no concuerdan con la cantidad dada anterior mente")
+                        else:break
+                    except ValueError as ve:
+                        print(f"dato invalido: {ve}")
+                        continue
             else:
                 print("ERROR: Tipo de evento desconocido: " + tipo)
         
