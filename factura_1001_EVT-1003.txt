@@ -2,17 +2,17 @@
   FACTURA DE COMPRA
 ==============================
 Cliente : 1001
-Evento  : EVT-1001
+Evento  : EVT-1003
 ------------------------------
-Silla/Zona : 2F
+Silla/Zona : VIP-1
 Zona       : VIP
-Costo base : $300.0
-Servicio 8%: $24.0
+Costo base : $500.0
+Servicio 8%: $40.0
 ------------------------------
-Silla/Zona : 6B
-Zona       : Platea
-Costo base : $150.0
-Servicio 8%: $12.0
+Silla/Zona : VIP-2
+Zona       : VIP
+Costo base : $500.0
+Servicio 8%: $40.0
 ------------------------------
-TOTAL      : $486.0
+TOTAL      : $1080.0
 ==============================
