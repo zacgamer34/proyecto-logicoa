@@ -1,4 +1,4 @@
-                # ============================================================
+# ============================================================
 # Apartado importaciones
 # Apartado funciones:
 
@@ -68,7 +68,7 @@ def mostrar_eventos(eventos):
         
 def cargar_precios_deporte():
     try:
-        precios = []
+        precios = {}
         archivo = open("recursos/precios_evento[EVT-1001].txt", "r")
         for linea in archivo:
             linea = linea.strip()
@@ -92,14 +92,14 @@ def cargar_precios_deporte():
         return precios
     except FileNotFoundError as ffe:
         print(f"Error no se encontro el archivo de precios - {ffe}")
-        return []
+        return {}
     except Exception as e:
         print(f"Error general en cargar_precios_deporte - {e}")
-        return []
+        return {}
 
 def cargar_precios_teatro():
     try:
-        precios = []
+        precios = {}
         archivo = open("recursos/precios_evento[EVT-1002].txt", "r")
         for linea in archivo:
             linea = linea.strip()
@@ -123,25 +123,26 @@ def cargar_precios_teatro():
         return precios 
     except FileNotFoundError as ffe:
         print(f"Error no se encontro el archivo de precios - {ffe}")
-        return []
+        return {}
     except Exception as e:
         print(f"Error general en cargar_precios_teatro - {e}")
-        return []
+        return {}
         
 def cargar_precios_concierto():
     try:
         precios = {}
-        archivo = open("recursos/precios_evento[EVT-1003].txt", "r")
+        archivo = open("recursos/precios_eventos[EVT-1003].txt", "r")
         for linea in archivo:
             linea = linea.strip()
             if linea == "":
                 continue
             partes = linea.split(",")
-            if len(partes) == 3:
-                zona         = partes[0].strip()
-                cupos_totales = int(partes[1].strip())
-                precio        = float(partes[2].strip())
-                precios[zona] = {"cupos_totales": cupos_totales, "precio": precio}
+            if len(partes) == 4:
+                rango         = partes[0].strip()   # ej: "1-5"
+                zona          = partes[1].strip()    # ej: "VIP"
+                cupos_totales = int(partes[2].strip())
+                precio        = float(partes[3].strip())
+                precios[zona] = {"cupos_totales": cupos_totales, "precio": precio, "rango": rango}
         archivo.close()
         return precios 
     except FileNotFoundError as ffe:
@@ -196,23 +197,16 @@ def cargar_mapa_teatro():
         return []
 
 def cargar_mapa_concierto():
+    """
+    Carga el mapa de concierto como cupos por zona.
+    Usa el archivo de precios para determinar las zonas y sus cupos disponibles.
+    """
     try:
         mapa = {}
-        archivo = open("recursos/mapa_evento[EVT-1003].txt", "r")
-        for linea in archivo:
-            linea = linea.strip()
-            if linea == "":
-                continue
-            partes = linea.split(",")
-            if len(partes) == 2:
-                zona   = partes[0].strip()
-                cupos  = int(partes[1].strip())
-                mapa[zona] = cupos
-        archivo.close()
+        precios = cargar_precios_concierto()
+        for zona, info in precios.items():
+            mapa[zona] = info["cupos_totales"]
         return mapa
-    except FileNotFoundError as ffe:
-        print(f"Error no se encontro el archivo de precios - {ffe}")
-        return {}
     except Exception as e:
         print(f"Error general en cargar_mapa_concierto - {e}")
         return {}
@@ -250,41 +244,30 @@ def compraBoleta(id_ingreso, numeroAsiento, letraAsiento, evento_id, mapa):
     Función para registrar la compra de una boleta en el mapa de asientos.
     """
     try:
-        # Convertir la letra a número de columna
+        # Convertir la letra a número de columna (A-T = 0-19)
+        letras_validas = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J",
+                          "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T"]
         
-        
-        if letraAsiento == "A":
-            numeroColumna = 0
-        elif letraAsiento == "B":
-            numeroColumna = 1
-        elif letraAsiento == "C":
-            numeroColumna = 2
-        elif letraAsiento == "D":
-            numeroColumna = 3
-        elif letraAsiento == "E":
-            numeroColumna = 4
-        elif letraAsiento == "F":
-            numeroColumna = 5
-        elif letraAsiento == "G":
-            numeroColumna = 6
-        elif letraAsiento == "H":
-            numeroColumna = 7
-        elif letraAsiento == "I":
-            numeroColumna = 8
-        elif letraAsiento == "J":
-            numeroColumna = 9
+        if letraAsiento in letras_validas:
+            numeroColumna = letras_validas.index(letraAsiento)
         else:
             return mapa, False
         
         # Ajustar índice (python es 0-based)
         indiceFila = numeroAsiento - 1
         
-        # Verificar si el asiento ya está ocupado
-        if mapa[indiceFila][numeroColumna] != "0":
+        # Verificar límites
+        if indiceFila < 0 or indiceFila >= len(mapa):
+            return mapa, False
+        if numeroColumna < 0 or numeroColumna >= len(mapa[indiceFila]):
             return mapa, False
         
-        # Marcar el asiento como ocupadas con el ID del cliente
-        mapa[indiceFila][numeroColumna] = id_ingreso
+        # Verificar si el asiento ya está ocupado (O = libre, X = ocupado)
+        if mapa[indiceFila][numeroColumna] != "O":
+            return mapa, False
+        
+        # Marcar el asiento como ocupado
+        mapa[indiceFila][numeroColumna] = "X"
         
         # Guardar el mapa en el archivo
         nombre_archivo = f"recursos/mapa_evento[{evento_id}].txt"
@@ -397,6 +380,10 @@ try:
             
             # redirigir segun el tipo de evento
             tipo = evento_elegido["tipo"]
+            # Reiniciar boletas y total para cada compra
+            boletas_compradas = []
+            total = 0.0
+            
             if tipo == "Teatro" or tipo == "Deporte":
                 if tipo == "Teatro":
                     print("Asientos disponibles en Teatro")
@@ -408,12 +395,15 @@ try:
                     mapaxEvento = cargar_mapa_deporte()
                     precios_evento = cargar_precios_deporte()
                 
-                # Mostrar el mapa
-                print("\nMapa de asientos (x = ocupado, 0 = libre):")
+                # Mostrar el mapa con encabezado de letras
+                print("\nMapa de asientos (X = ocupado, O = libre):")
+                print("     " + "  ".join(listaLetras))
+                num_fila = 1
                 for fila in mapaxEvento:
-                    print(" ".join(fila))
+                    print(f"{num_fila:2d}   " + "  ".join(fila))
+                    num_fila += 1
                     
-                print("\n| x = ocupado | 0 = libre|")
+                print("\n| X = ocupado | O = libre|")
                 
                 # Entrada de la cantidad de sillas
                 while True:
@@ -428,15 +418,36 @@ try:
                         continue
                 
                 # Selección de asientos
+                num_filas_mapa = len(mapaxEvento)
                 while True:
                     try:
-                        id_silla = input(f"Ingrese que asientos desea comprar\n|Selecione asi Numero-LetraIdentificadora|\n|Despues de selecionar uno separe la seleccion con (,)|\nLetras->{listaLetras}\nNumeros[1-10]\n:").upper()
+                        id_silla = input(f"Ingrese que asientos desea comprar\n|Selecione asi Numero-LetraIdentificadora|\n|Despues de selecionar uno separe la seleccion con (,)|\nLetras->{listaLetras}\nNumeros[1-{num_filas_mapa}]\n:").upper()
                         sillaSeperada = id_silla.split(",")
                         
                         if len(sillaSeperada) != cantidadSillas:
                             raise ValueError("La cantidad de asientos seleccionados no coincide con la cantidad ingresada anteriormente")
-                        else:
-                            break
+                        
+                        # Validar formato y rango de asientos
+                        for asiento in sillaSeperada:
+                            asiento = asiento.strip()
+                            if "-" not in asiento:
+                                raise ValueError(f"Formato inválido: '{asiento}' debe ser Numero-Letra")
+                            partes = asiento.split("-")
+                            if len(partes) != 2:
+                                raise ValueError(f"Formato inválido: '{asiento}'")
+                            try:
+                                num = int(partes[0].strip())
+                                letra = partes[1].strip()
+                                if num < 1 or num > num_filas_mapa:
+                                    raise ValueError(f"Número de asiento {num} fuera de rango [1-{num_filas_mapa}]")
+                                if letra not in listaLetras:
+                                    raise ValueError(f"Letra '{letra}' inválida")
+                            except ValueError as e:
+                                if "invalid literal" in str(e):
+                                    raise ValueError(f"Número inválido en '{asiento}'")
+                                raise
+                        
+                        break
                     except ValueError as ve:
                         print(f"Dato invalido: {ve}")
                         continue
@@ -444,16 +455,36 @@ try:
                 # Procesar los asientos seleccionados
                 
                 for y in sillaSeperada:
-                    ySeparado=y.replace("",",").split(",")
+                    ySeparado = y.strip().split("-")
             
-                    numeroAsiento=ySeparado[1]
-                    numeroAsiento=int(numeroAsiento)
-                    letraAsiento=ySeparado[2]
+                    numeroAsiento = int(ySeparado[0].strip())
+                    letraAsiento = ySeparado[1].strip()
             
-            
-                mapaxEvento,seleccion_asientos=compraBoleta(id_ingreso,numeroAsiento,letraAsiento,id_evento,mapaxEvento)
-                if seleccion_asientos == True: print("asientos guardados con exito")
-                else: print("asiento ocupado porfavor elija otro")
+                    mapaxEvento, seleccion_asientos = compraBoleta(id_ingreso, numeroAsiento, letraAsiento, id_evento, mapaxEvento)
+                    if seleccion_asientos == True:
+                        print("Compra exitosa del asiento " + letraAsiento + str(numeroAsiento))
+                        # Calcular precio según la fila
+                        if numeroAsiento in precios_evento:
+                            info_precio = precios_evento[numeroAsiento]
+                            base = info_precio["precio"]
+                            servicio = base * 0.08
+                            boletas_compradas.append({
+                                "silla": str(numeroAsiento) + "-" + letraAsiento,
+                                "zona": info_precio["zona"],
+                                "base": base,
+                                "servicio": servicio
+                            })
+                            total += base + servicio
+                        else:
+                            print(f"Advertencia: No se encontró precio para la fila {numeroAsiento}")
+                    
+                    else:
+                        print("Error: El asiento " + letraAsiento + str(numeroAsiento) + " ya esta ocupado o no existe. Por favor seleccione otro asiento.")
+                
+                # Generar factura para Teatro/Deporte
+                if boletas_compradas:
+                    print(f"\nTotal a pagar: ${round(total, 2)}")
+                    guardar_factura(id_ingreso, id_evento, boletas_compradas, total)
                 
                     
                 
@@ -484,23 +515,57 @@ try:
                 
                 while True:
                     try:
-                        id_silla = input(f"Ingrese que asientos desea comprar\n|Selecione asi Numero-LetraIdentificadora|\n|Despues de selecionar uno separe la seleccion con (,)|\nLetras->{listaLetras}\nNumeros[1-10]\n:").upper()
+                        id_silla = input(f"Ingrese que zonas desea comprar\n|Ingrese el nombre de la zona|\n|Despues de selecionar una separe la seleccion con (,)|\nZonas disponibles: {list(mapaxEvento.keys())}\n:").upper()
                         sillaSeperada = id_silla.split(",")
                         
                         if len(sillaSeperada) != cantidadSillas:
-                            raise ValueError("La cantidad de asientos seleccionados no coincide con la cantidad ingresada anteriormente")
-                        else:
-                            break
+                            raise ValueError("La cantidad de zonas seleccionadas no coincide con la cantidad ingresada anteriormente")
+                        
+                        # Validar que las zonas existan y tengan cupos disponibles
+                        for zona in sillaSeperada:
+                            zona = zona.strip()
+                            if zona not in mapaxEvento:
+                                raise ValueError(f"Zona '{zona}' no encontrada")
+                            if mapaxEvento[zona] <= 0:
+                                raise ValueError(f"Zona '{zona}' está llena")
+                        
+                        break
                     except ValueError as ve:
                         print(f"Dato invalido: {ve}")
                         continue
                 
-                for y in sillaSeperada:
-                    ySeparado=y.replace("",",").split(",")
-            
-                    numeroAsiento=ySeparado[1]
-                    numeroAsiento=int(numeroAsiento)
-                    letraAsiento=ySeparado[2]
+                # Procesar compra de entradas de concierto
+                boletas_compradas = []
+                for zona in sillaSeperada:
+                    zona = zona.strip()
+                    if mapaxEvento[zona] > 0:
+                        mapaxEvento[zona] -= 1
+                        precio_zona = precios_evento[zona]["precio"] if zona in precios_evento else 0
+                        base = precio_zona
+                        servicio = base * 0.08
+                        boletas_compradas.append({
+                            "silla": zona,
+                            "zona": zona,
+                            "base": base,
+                            "servicio": servicio
+                        })
+                        total += base + servicio
+                        print(f"Entrada comprada para la zona {zona} - Precio: ${precio_zona:.2f}")
+                    else:
+                        print(f"Error: Zona {zona} sin cupos disponibles")
+                
+                # Guardar el mapa actualizado
+                nombre_archivo = f"recursos/mapa_evento[{id_evento}].txt"
+                try:
+                    with open(nombre_archivo, "w") as archivo:
+                        for zona, cupos in mapaxEvento.items():
+                            archivo.write(f"{zona},{cupos}\n")
+                except Exception as e:
+                    print(f"Error al guardar el mapa: {e}")
+                
+                # Generar factura
+                if boletas_compradas:
+                    guardar_factura(id_ingreso, id_evento, boletas_compradas, total)
                 
                 
             else:

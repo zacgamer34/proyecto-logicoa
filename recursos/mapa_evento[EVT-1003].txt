@@ -1,10 +1,2 @@
-O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O
-O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O
-O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O
-O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O
-O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O
-O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O
-O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O
-O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O
-O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O
-O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O,O
+VIP,198
+General,300
