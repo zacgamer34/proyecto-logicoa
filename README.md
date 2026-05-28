@@ -9,6 +9,9 @@ Este repositorio contiene la solución de software desarrollada en Python puro (
 El proyecto fue construido bajo la premisa de **cero dependencias externas**. Utiliza únicamente la biblioteca estándar de Python (módulos nativos como `os` o `math` si aplica), por lo que no requiere gestores de paquetes como `pip`.
 
 -requiere cargar directamente los archivos asociados a los eventos y sean guardados en la carpeta nativa del programa de recursos (para una correcta ejecucion  porfavor trate que las rutas relativas o los nombres de los archivos concuerde con los que estan en las variables del programa ) seguiremos mejorando el programa con el tiempo , gracias por su comprencion 😁
+
+
+
 ### Prerrequisitos
 * Tener instalado **Python 3.8 o superior** en su entorno local.
 
