@@ -1,8 +1,10 @@
+                # ============================================================
 # Apartado importaciones
 # Apartado funciones:
 
 
 # CARGA DE ARCHIVOS
+
 
 # BLOQUE 1 - CARGA DE ARCHIVOS
 
@@ -33,7 +35,7 @@ def cargar_eventos():
         
         archivo = open("recursos/eventos.txt", "r")
         for linea in archivo:
-            linea == linea.strip()
+            linea = linea.strip()
             if linea == "": continue
             partes = linea.split(",")
             if len(partes) == 6:
@@ -56,13 +58,13 @@ def cargar_eventos():
 #BLOQUE 2 - FUNCIONES DE VISUALIZACION
 
 def mostrar_eventos(eventos):
-        contador = 1
-        print("\n ====== EVENTOS DISPONIBLES ======")
-        
-        for evento in eventos:
-            print(f"{contador}. [ {evento["id"]} ] {evento["nombre"] } | {evento["tipo"]} | {evento["ciudad"]} | {evento["fecha"]} | {evento["hora"]}")
-            contador = contador + 1
-        print("=================================")
+    contador = 1
+    print("\n ====== EVENTOS DISPONIBLES ======")
+    
+    for evento in eventos:
+        print(f"{contador}. [ {evento['id']} ] {evento['nombre']} | {evento['tipo']} | {evento['ciudad']} | {evento['fecha']} | {evento['hora']}")
+        contador = contador + 1
+    print("=================================")
         
 def cargar_precios_deporte():
     try:
@@ -90,6 +92,10 @@ def cargar_precios_deporte():
         return precios
     except FileNotFoundError as ffe:
         print(f"Error no se encontro el archivo de precios - {ffe}")
+        return []
+    except Exception as e:
+        print(f"Error general en cargar_precios_deporte - {e}")
+        return []
 
 def cargar_precios_teatro():
     try:
@@ -117,10 +123,14 @@ def cargar_precios_teatro():
         return precios 
     except FileNotFoundError as ffe:
         print(f"Error no se encontro el archivo de precios - {ffe}")
+        return []
+    except Exception as e:
+        print(f"Error general en cargar_precios_teatro - {e}")
+        return []
         
 def cargar_precios_concierto():
     try:
-        precios = []
+        precios = {}
         archivo = open("recursos/precios_evento[EVT-1003].txt", "r")
         for linea in archivo:
             linea = linea.strip()
@@ -136,6 +146,10 @@ def cargar_precios_concierto():
         return precios 
     except FileNotFoundError as ffe:
         print(f"Error no se encontro el archivo de precios - {ffe}")
+        return {}
+    except Exception as e:
+        print(f"Error general en cargar_precios_concierto - {e}")
+        return {}
         
 def cargar_mapa_deporte():
     try:
@@ -154,6 +168,10 @@ def cargar_mapa_deporte():
         return mapa
     except FileNotFoundError as ffe:
         print(f"Error no se encontro el archivo de precios - {ffe}")
+        return []
+    except Exception as e:
+        print(f"Error general en cargar_mapa_deporte - {e}")
+        return []
 
 def cargar_mapa_teatro():
     try:
@@ -172,10 +190,14 @@ def cargar_mapa_teatro():
         return mapa
     except FileNotFoundError as ffe:
         print(f"Error no se encontro el archivo de precios - {ffe}")  
+        return []
+    except Exception as e:
+        print(f"Error general en cargar_mapa_teatro - {e}")
+        return []
 
 def cargar_mapa_concierto():
     try:
-        mapa = []
+        mapa = {}
         archivo = open("recursos/mapa_evento[EVT-1003].txt", "r")
         for linea in archivo:
             linea = linea.strip()
@@ -190,6 +212,10 @@ def cargar_mapa_concierto():
         return mapa
     except FileNotFoundError as ffe:
         print(f"Error no se encontro el archivo de precios - {ffe}")
+        return {}
+    except Exception as e:
+        print(f"Error general en cargar_mapa_concierto - {e}")
+        return {}
         
 # BLOQUE 3 - GUARDAR / ACTUALIZAR ARCHIVOS
         
@@ -219,11 +245,67 @@ def guardar_factura(id_cliente, evento_id, boletas_compradas, total):
     except Exception as error:
         print("ERROR al guardar la factura: " + str(error))
         
+def compraBoleta(id_ingreso, numeroAsiento, letraAsiento, evento_id, mapa):
+    """
+    Función para registrar la compra de una boleta en el mapa de asientos.
+    """
+    try:
+        # Convertir la letra a número de columna
+        
+        
+        if letraAsiento == "A":
+            numeroColumna = 0
+        elif letraAsiento == "B":
+            numeroColumna = 1
+        elif letraAsiento == "C":
+            numeroColumna = 2
+        elif letraAsiento == "D":
+            numeroColumna = 3
+        elif letraAsiento == "E":
+            numeroColumna = 4
+        elif letraAsiento == "F":
+            numeroColumna = 5
+        elif letraAsiento == "G":
+            numeroColumna = 6
+        elif letraAsiento == "H":
+            numeroColumna = 7
+        elif letraAsiento == "I":
+            numeroColumna = 8
+        elif letraAsiento == "J":
+            numeroColumna = 9
+        else:
+            return mapa, False
+        
+        # Ajustar índice (python es 0-based)
+        indiceFila = numeroAsiento - 1
+        
+        # Verificar si el asiento ya está ocupado
+        if mapa[indiceFila][numeroColumna] != "0":
+            return mapa, False
+        
+        # Marcar el asiento como ocupadas con el ID del cliente
+        mapa[indiceFila][numeroColumna] = id_ingreso
+        
+        # Guardar el mapa en el archivo
+        nombre_archivo = f"recursos/mapa_evento[{evento_id}].txt"
+        
+        archivo = open(nombre_archivo, "w")
+        for fila in mapa:
+            archivo.write(",".join(fila) + "\n")
+        archivo.close()
+        
+        return mapa, True
+        
+    except IndexError as Ie:
+        return mapa, False
+    except Exception as e:
+        raise Exception(f"Error en la funcion compraBoleta: {e}")
 # BLOQUE 4 - CONTEO DE BOLETAS YA COMPRADAS POR CLIENTE
 # BLOQUE 5 - COMPRA TEATRO / DEPORTE
 # BLOQUE 6 - COMPRA CONCIERTO        
 # BLOQUE 7 - MODULO DE REPORTES (ADMINISTRADOR)
 
+# ============================================================
 # Apartado principal
 try:
     #datos de entrada
@@ -232,17 +314,21 @@ try:
     #datos de salida
     nombre_cliente = ""
     #variables adicionales
-    clientes = ""
-    eventos = ""
+    clientes = {}
+    eventos = []
     mensajeMenu = "\n1: Ver eventos disponibles \n2: Comprar Boletas \n3: Salir \nElija una opcion: "
     opcionMenu = 0
-    evento_elegido = ""
+    evento_elegido = None
     mensajeBienvenida=""
-    mapaxEvento=""
+    mapaxEvento=[]
     seleccionAsientos=""
     listaLetras=["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T"]
-    cantidadSillas=""
+    cantidadSillas=0
     id_silla=""
+    boletas_compradas = []
+    total = 0.0
+    sillaSeperada=""
+    
     # Proceso
     mensajeBienvenida+="============================================"
     mensajeBienvenida+="\n          BIENVENIDO A EVENT.CO           "
@@ -264,22 +350,23 @@ try:
     # LOGIN
     while True:
     
-            id_ingreso = input("\nIngrese su ID de cliente: ").strip()
+        id_ingreso = input("\nIngrese su ID de cliente: ").strip()
 
-            if id_ingreso not in clientes:
-                print("Error: el ID " + id_ingreso + "no esta registrado. \n porfavor vuelva a ingresarlo")
+        if id_ingreso not in clientes:
+            print("Error: el ID " + id_ingreso + " no esta registrado. \n porfavor vuelva a ingresarlo")
                 
-            else:
-                break
-            nombre_cliente = clientes[id_ingreso]
-            print("\nBienvenido/a, " + nombre_cliente)
+        else:
+            break
+            
+    nombre_cliente = clientes[id_ingreso]
+    print("\nBienvenido/a, " + nombre_cliente)
 
             
     while True:
         try:
             print("\n ===MENU=== \n")
             opcionMenu = int(input(mensajeMenu))
-            if not (1 <= opcionMenu <= 4): 
+            if not (1 <= opcionMenu <= 3): 
                 raise ValueError("Valor fuera de rango")
         except ValueError as ve:
             print(f"Opcion invalida: {ve}")
@@ -295,57 +382,68 @@ try:
             id_evento = input("\nIngrese el ID del evento: ").strip()
             
             # Buscar el evento en la lista 
+            evento_elegido = None
             for evento in eventos:
                 if evento["id"] == id_evento:
                     evento_elegido = evento
-                    print(f"Eventos: {evento_elegido["nombre"] (evento_elegido["tipo"])}")
                     break
-                else:
-                    print(f"ERROR: No se encontro el evento con ID {id_evento}")
-                    continue
+            
+            if evento_elegido is None:
+                print(f"ERROR: No se encontro el evento con ID {id_evento}")
+                continue
+            
+            
+            print(f"Evento: {evento_elegido['nombre']} ({evento_elegido['tipo']})")
             
             # redirigir segun el tipo de evento
             tipo = evento_elegido["tipo"]
             if tipo == "Teatro" or tipo == "Deporte":
-                if tipo== "Teatro":
-                    print("asientos disponibles en teatro ")
-                    mapaxEvento=cargar_mapa_teatro()
-                    print(mapaxEvento)
+                if tipo == "Teatro":
+                    print("Asientos disponibles en Teatro")
+                    mapaxEvento = cargar_mapa_teatro()
+                    precios_evento = cargar_precios_teatro()
                     
-                    print("\n| x = ocupado|| 0= libre|\n")
+                elif tipo == "Deporte":
+                    print("Asientos disponibles en Deporte")
+                    mapaxEvento = cargar_mapa_deporte()
+                    precios_evento = cargar_precios_deporte()
+                
+                # Mostrar el mapa
+                print("\nMapa de asientos (x = ocupado, 0 = libre):")
+                for fila in mapaxEvento:
+                    print(" ".join(fila))
                     
-                elif tipo=="Deporte":
-                    print("asientos disponibles en Deporte")
-                    mapaxEvento=cargar_mapa_deporte()
-                    print(mapaxEvento)
-                    print("\n| x = ocupado|| 0= libre|\n")
+                print("\n| x = ocupado | 0 = libre|")
                 
-                
-            elif tipo == "Concierto":
-                print("asientos disponibles en Concierto")
-                mapaxEvento=cargar_precios_concierto()
-                print(mapaxEvento)
-                print("\n| x = ocupado|----| 0= libre|\n")
-                #entrada del dato selecion de sillas
+                # Entrada de la cantidad de sillas
                 while True:
                     try:
-                        cantidadSillas=int(input("ingrese la cantidad de sillas que desea escojer"))
-                        if not(cantidadSillas>0): raise TypeError("numero ingresado invalido")
-                        else:break
-                    except TypeError as Te:
-                        print(f"error en los datos   -> {Te}")
-                        continue
-                #validacion de la cantidad de asientos
-                while True:
-                    try:
-                        id_silla=idAsiento=input(f"ingrese que asientos desea\n|selecionar asi Numero-LetraIDentificadora|\n|despues de selecionar uno serpar la selecion con (,)|\nletras->{listaLetras}\nnumeros[1-10]\n:").upper()
-                        asientoSeparado=idAsiento.split(",")
-                        if not(len(asientoSeparado)==cantidadSillas): raise ValueError("los asientos selecionado no concuerdan con la cantidad selecionada anterioermente")
-                        else:break
+                        cantidadSillas = int(input("\nIngrese la cantidad de asientos que desea comprar: "))
+                        if cantidadSillas <= 0:
+                            raise ValueError("Debe ser mayor a 0")
+                        else:
+                            break
                     except ValueError as ve:
-                        print(f"dato invalido: {ve}")
+                        print(f"Error en los datos: {ve}")
                         continue
-                for y in asientoSeparado:
+                
+                # Selección de asientos
+                while True:
+                    try:
+                        id_silla = input(f"Ingrese que asientos desea comprar\n|Selecione asi Numero-LetraIdentificadora|\n|Despues de selecionar uno separe la seleccion con (,)|\nLetras->{listaLetras}\nNumeros[1-10]\n:").upper()
+                        sillaSeperada = id_silla.split(",")
+                        
+                        if len(sillaSeperada) != cantidadSillas:
+                            raise ValueError("La cantidad de asientos seleccionados no coincide con la cantidad ingresada anteriormente")
+                        else:
+                            break
+                    except ValueError as ve:
+                        print(f"Dato invalido: {ve}")
+                        continue
+                
+                # Procesar los asientos seleccionados
+                
+                for y in sillaSeperada:
                     ySeparado=y.replace("",",").split(",")
             
                     numeroAsiento=ySeparado[1]
@@ -353,24 +451,77 @@ try:
                     letraAsiento=ySeparado[2]
             
             
+                mapaxEvento,seleccion_asientos=compraBoleta(id_ingreso,numeroAsiento,letraAsiento,id_evento,mapaxEvento)
+                if seleccion_asientos == True: print("asientos guardados con exito")
+                else: print("asiento ocupado porfavor elija otro")
+                
+                    
+                
+            elif tipo == "Concierto":
+                print("Asientos disponibles en Concierto")
+                mapaxEvento = cargar_mapa_concierto()
+                precios_evento = cargar_precios_concierto()
+                
+                print("\nZonas disponibles:")
+                for zona, cupos in mapaxEvento.items():
+                    precio_zona = precios_evento[zona]["precio"] if zona in precios_evento else 0
+                    print(f"  {zona}: {cupos} cupos disponibles - Precio: ${precio_zona:.2f}")
+                
+                print("\n| x = ocupado | 0 = libre|")
+                
+                
+                # Entrada del dato selecion de sillas
+                while True:
+                    try:
+                        cantidadSillas = int(input("Ingrese la cantidad de entradas que desea comprar: "))
+                        if cantidadSillas <= 0:
+                            raise ValueError("Debe ser mayor a 0")
+                        else:
+                            break
+                    except ValueError as ve:
+                        print(f"Error en los datos: {ve}")
+                        continue
+                
+                while True:
+                    try:
+                        id_silla = input(f"Ingrese que asientos desea comprar\n|Selecione asi Numero-LetraIdentificadora|\n|Despues de selecionar uno separe la seleccion con (,)|\nLetras->{listaLetras}\nNumeros[1-10]\n:").upper()
+                        sillaSeperada = id_silla.split(",")
+                        
+                        if len(sillaSeperada) != cantidadSillas:
+                            raise ValueError("La cantidad de asientos seleccionados no coincide con la cantidad ingresada anteriormente")
+                        else:
+                            break
+                    except ValueError as ve:
+                        print(f"Dato invalido: {ve}")
+                        continue
+                
+                for y in sillaSeperada:
+                    ySeparado=y.replace("",",").split(",")
+            
+                    numeroAsiento=ySeparado[1]
+                    numeroAsiento=int(numeroAsiento)
+                    letraAsiento=ySeparado[2]
+                
+                
             else:
                 print("ERROR: Tipo de evento desconocido: " + tipo)
         
         
         elif opcionMenu == 3:
             # Finalizar
+            print("\nGracias por usar EVENT.CO. Hasta luego!")
             break
         
-
-    #Cerrar documentos
-    clientes.close()
-    eventos.close()
+        else:
+            print("Opcion invalida. Por favor seleccione 1, 2 o 3.")
 
 except TypeError as Te:
-    print(f"error en los datos   -> {Te}")
+    print(f"Error en los datos: {Te}")
+except FileNotFoundError as ffe:
+    print(f"Error de archivo no encontrado: {ffe}")
 except Exception as e:
-    print(f"Error generico -> {e}")
+    print(f"Error generico: {e}")
 else:
-    print("Ejecución exitosa")
+    print("\nEjecución exitosa")
 finally:
     print("Fin del programa")
