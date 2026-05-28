@@ -39,8 +39,14 @@ matriz = [list(map(str,linea.strip().split(','))) for linea in lineas]
 # Mostrar la matriz
 for fila in matriz:
     print(fila)
+if matriz[letras][numeros-1]=="X":
+    print("Asiento ocupado, elija otro. ")
+                
+else:
+    pass
 
-print ("====================")
+
+
 
 
 matriz[letras][numeros-1]="X"
