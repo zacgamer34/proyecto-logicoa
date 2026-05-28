@@ -4,7 +4,7 @@
 Cliente : 1002
 Evento  : EVT-1001
 ------------------------------
-Silla/Zona : 1F
+Silla/Zona : 3A
 Zona       : VIP
 Costo base : $300.0
 Servicio 8%: $24.0

@@ -16,8 +16,8 @@ def cargar_clientes():
         raise FileNotFoundError(f"Error no se encuentra el archivo clientes.txt - {ffe}")
     except Exception as e:
         raise Exception(f"Error generico en la funcion cargar_clientes - {e}")
- 
- 
+
+
 def cargar_eventos():
     try:
         eventos = []
@@ -42,15 +42,8 @@ def cargar_eventos():
         raise FileNotFoundError(f"Error no se encuentra el archivo eventos.txt - {ffe}")
     except Exception as e:
         raise Exception(f"Error generico en la funcion cargar_eventos - {e}")
- 
- 
-def mostrar_eventos(eventos):
-    print("\n ====== EVENTOS DISPONIBLES ======")
-    for i, evento in enumerate(eventos, start=1):
-        print(f"{i}. [ {evento['id']} ] {evento['nombre']} | {evento['tipo']} | {evento['ciudad']} | {evento['fecha']} | {evento['hora']}")
-    print("=================================")
- 
- 
+
+
 def cargar_precios_asientos(evento_id):
     try:
         precios = {}
@@ -64,11 +57,11 @@ def cargar_precios_asientos(evento_id):
                     rango  = partes[0].strip()
                     zona   = partes[1].strip()
                     precio = float(partes[2].strip())
- 
+
                     extremos = rango.split("-")
                     inicio = int(extremos[0])
                     fin    = int(extremos[1])
- 
+
                     for num_fila in range(inicio, fin + 1):
                         precios[num_fila] = {"zona": zona, "precio": precio}
         return precios
@@ -78,8 +71,8 @@ def cargar_precios_asientos(evento_id):
     except Exception as e:
         print(f"Error general en cargar_precios_asientos - {e}")
         return {}
- 
- 
+
+
 def cargar_precios_concierto():
     try:
         precios = {}
@@ -101,8 +94,8 @@ def cargar_precios_concierto():
     except Exception as e:
         print(f"Error general en cargar_precios_concierto - {e}")
         return {}
- 
- 
+
+
 def cargar_mapa_asientos(evento_id):
     try:
         mapa = []
@@ -121,8 +114,8 @@ def cargar_mapa_asientos(evento_id):
     except Exception as e:
         print(f"Error general en cargar_mapa_asientos - {e}")
         return []
- 
- 
+
+
 def cargar_mapa_concierto():
     try:
         mapa = {}
@@ -321,10 +314,17 @@ try:
             continue
  
         if opcionMenu == 1:
-            mostrar_eventos(eventos)
+            print("\n ====== EVENTOS DISPONIBLES ======")
+            for i, evento in enumerate(eventos, start=1):
+                print(f"{i}. [ {evento['id']} ] {evento['nombre']} | {evento['tipo']} | {evento['ciudad']} | {evento['fecha']} | {evento['hora']}")
+            print("=================================")
  
         elif opcionMenu == 2:
-            mostrar_eventos(eventos)
+            print("\n ====== EVENTOS DISPONIBLES ======")
+            for i, evento in enumerate(eventos, start=1):
+                print(f"{i}. [ {evento['id']} ] {evento['nombre']} | {evento['tipo']} | {evento['ciudad']} | {evento['fecha']} | {evento['hora']}")
+            print("=================================")
+            
             id_evento = input("\nIngrese el ID del evento: ").strip()
  
             evento_elegido = None
