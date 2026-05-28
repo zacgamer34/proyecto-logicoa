@@ -587,6 +587,6 @@ except FileNotFoundError as ffe:
 except Exception as e:
     print(f"Error generico: {e}")
 else:
-    print("\nEjecución exitosa")
+    print("\nEjecucion exitosa")
 finally:
     print("Fin del programa")
