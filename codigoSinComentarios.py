@@ -312,7 +312,7 @@ try:
  
     while True:
         try:
-            print("\n ===MENU=== \n")
+            print("\n ===MENU===")
             opcionMenu = int(input(mensajeMenu))
             if not (1 <= opcionMenu <= 3):
                 raise ValueError("Valor fuera de rango")
