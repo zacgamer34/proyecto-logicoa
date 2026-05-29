@@ -602,7 +602,7 @@ try:
                         )
                     # Guardar reporte en archivo
                     archivo_reporte = guardar_reporte_ventas(datos_reporte, evento_seleccionado["id"])
-                
+                    print(f"\nse guardo el reporte en {archivo_reporte}")
             elif opcionPanel==2:
                 break
             

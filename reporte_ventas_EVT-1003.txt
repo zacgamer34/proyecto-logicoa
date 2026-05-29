@@ -1,0 +1,28 @@
+==================================================
+       REPORTE DE VENTAS - EVENT.CO
+==================================================
+
+ID Evento     : EVT-1003
+Tipo Evento   : Concierto
+--------------------------------------------------
+
+--- RESUMEN GENERAL ---
+Total de asientos      : 500
+Asientos vendidos      : 10
+Asientos disponibles   : 490
+Porcentaje ocupación   : 2.0%
+Ingresos totales       : $4579.20
+
+--- DETALLE POR ZONA ---
+
+Zona: VIP
+  Vendidos : 8
+  Ingresos : $4320.00
+
+Zona: General
+  Vendidos : 2
+  Ingresos : $259.20
+
+==================================================
+        FIN DEL REPORTE
+==================================================
