@@ -1,2 +1,2 @@
-VIP,196
-General,300
+VIP,192
+General,298

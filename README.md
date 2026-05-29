@@ -10,6 +10,8 @@ El proyecto fue construido bajo la premisa de **cero dependencias externas**. Ut
 
 -requiere cargar directamente los archivos asociados a los eventos y sean guardados en la carpeta nativa del programa de recursos (para una correcta ejecucion  porfavor trate que las rutas relativas o los nombres de los archivos concuerde con los que estan en las variables del programa ) seguiremos mejorando el programa con el tiempo , gracias por su comprencion 😁
 
+-adicional nuevo agregar el archivo con los datos de los admins 
+
 
 
 ### Prerrequisitos
