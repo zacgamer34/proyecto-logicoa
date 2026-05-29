@@ -1,6 +1,5 @@
 # Apartado importaciones
 # Apartado funciones:
-# CARGA DE ARCHIVOS
 # BLOQUE 1 - CARGA DE ARCHIVOS
 def cargar_clientes():
     """Carga el archivo de clientes y retorna un diccionario {id: nombre}."""
@@ -273,11 +272,7 @@ def compra_concierto(zona, cantidad, mapa_concierto, evento_id):
         if cantidad > cupos_disponibles:
             print(f"ERROR: Solo hay {cupos_disponibles} cupos disponibles en la zona {zona}.")
             return mapa_concierto, False
-
-        # Descontar cupos
         mapa_concierto[zona] = cupos_disponibles - cantidad
-
-        # Guardar el mapa actualizado
         with open(f"recursos/mapa_evento[{evento_id}].txt", "w") as archivo:
             for z, c in mapa_concierto.items():
                 archivo.write(f"{z},{c}\n")
@@ -288,14 +283,9 @@ def compra_concierto(zona, cantidad, mapa_concierto, evento_id):
         raise Exception(f"Error en la funcion compra_concierto: {e}")
 
 def parsear_asiento(texto):
-    """
-    Parsea un texto de asiento en formato 'NumeroLetra' o 'Numero-Letra'.
-    Ejemplo: '3A' -> (3, 'A'), '3-A' -> (3, 'A')
-    Retorna (numero, letra) o lanza ValueError si el formato es invalido.
-    """
     texto = texto.strip()
 
-    # Intentar formato con guion: "3-A"
+    
     if "-" in texto:
         partes = texto.split("-")
         if len(partes) == 2:
@@ -304,7 +294,6 @@ def parsear_asiento(texto):
             if len(letra) == 1 and letra.isalpha():
                 return numero, letra
 
-    # Intentar formato sin guion: "3A" (numeros seguidos de una letra)
     numero_str = ""
     letra = ""
     for char in texto:
@@ -320,14 +309,12 @@ def parsear_asiento(texto):
 
 
 def mostrar_mapa_asientos(mapaxEvento, listaLetras):
-    """Muestra el mapa de asientos con encabezados de letras y numeros de fila."""
     num_columnas = len(mapaxEvento[0]) if mapaxEvento else 0
     letras_header = listaLetras[:num_columnas]
 
     print("\n    " + "  ".join(letras_header))
     print("   " + "---" * num_columnas)
     for i, fila in enumerate(mapaxEvento, start=1):
-        # Mostrar O como 'O' (libre) y cualquier otro valor como 'X' (ocupado)
         celdas = []
         for celda in fila:
             if celda == "O":
@@ -374,7 +361,7 @@ def calcular_datos_reporte(evento_id, tipo_evento):
             if not mapa:
                 raise ValueError(f"No se pudo cargar el mapa para el evento {evento_id}")
             
-            # Calcular totales遍历地图
+            # Calcular totales
             total_asientos = 0
             asientos_vendidos = 0
             ingresos_totales = 0.0
@@ -543,10 +530,21 @@ try:
     admin_nombre=""
     id_evento_reporte=""
     admin_nombre=""
+    zona_nombre=""
+    zona=""
+    zonas_lista=""
+    mapaxEvento=""
+    precio_zona=""
+    precios_evento=""
+    archivo_reporte=""
+    mensaje_reporte=""
+    mensajeBienvenida=""
+    sillaSeperada=[]
     # Proceso
-    print("============================================")
-    print("          BIENVENIDO A EVENT.CO           ")
-    print("============================================")
+    mensajeBienvenida+="============================================"
+    mensajeBienvenida+="          BIENVENIDO A EVENT.CO           "
+    mensajeBienvenida+="============================================"
+    print(mensajeBienvenida)
 
     # Cargar datos al arrancar
     clientes = cargar_clientes()
@@ -604,13 +602,14 @@ try:
                     # Guardar reporte en archivo
                     archivo_reporte = guardar_reporte_ventas(datos_reporte, evento_seleccionado["id"])
                     
-                    print(f"\n--- REPORTE GENERADO ---")
-                    print(f"Evento: {evento_seleccionado['nombre']}")
-                    print(f"Asientos vendidos: {datos_reporte['asientos_vendidos']}")
-                    print(f"Ingresos totales: ${datos_reporte['ingresos_totales']:.2f}")
-                    print(f"Porcentaje ocupación: {datos_reporte['porcentaje_occupacion']}%")
-                    print(f"Reporte guardado en: {archivo_reporte}")
-                
+                    mensaje_reporte+=f"\n--- REPORTE GENERADO ---\n"
+                    mensaje_reporte+=f"\nEvento: {evento_seleccionado['nombre']}\n"
+                    mensaje_reporte+=f"\nAsientos vendidos: {datos_reporte['asientos_vendidos']}\n"
+                    mensaje_reporte+=f"\nIngresos totales: ${datos_reporte['ingresos_totales']:.2f}\n"
+                    mensaje_reporte+=f"\nPorcentaje ocupación: {datos_reporte['porcentaje_occupacion']}%\n"
+                    mensaje_reporte+=f"\nReporte guardado en: {archivo_reporte}\n"
+
+                    print(mensaje_reporte)
                 
             elif opcionPanel==2:
                 break
@@ -650,23 +649,18 @@ try:
 
             print(f"Evento: {evento_elegido['nombre']} ({evento_elegido['tipo']})")
 
-            # redirigir segun el tipo de evento
+            
             tipo = evento_elegido["tipo"]
 
             if tipo == "Teatro" or tipo == "Deporte":
-                # --- COMPRA TEATRO / DEPORTE ---
+                
                 print(f"\nAsientos disponibles en {tipo}")
                 mapaxEvento = cargar_mapa_asientos(id_evento)
                 precios_evento = cargar_precios_asientos(id_evento)
-
                 if not mapaxEvento:
                     print("ERROR: No se pudo cargar el mapa de asientos.")
                     continue
-
-                # Mostrar el mapa con formato
                 mostrar_mapa_asientos(mapaxEvento, listaLetras)
-
-                # Entrada de la cantidad de sillas
                 cantidadSillas = 0
                 while True:
                     try:
@@ -678,8 +672,6 @@ try:
                     except ValueError as ve:
                         print(f"Error en los datos: {ve}")
                         continue
-
-                # Seleccion de asientos
                 sillaSeperada = []
                 while True:
                     try:
@@ -691,37 +683,28 @@ try:
                             f"Filas [1-{len(mapaxEvento)}]\n: "
                         ).upper()
                         sillaSeperada = id_silla.split(",")
-
                         if len(sillaSeperada) != cantidadSillas:
                             raise ValueError("La cantidad de asientos seleccionados no coincide con la cantidad ingresada")
-                        # Validar formato de cada asiento antes de proceder
+                        
                         for s in sillaSeperada:
                             parsear_asiento(s)
                         break
                     except ValueError as ve:
                         print(f"Dato invalido: {ve}")
                         continue
-
-                # Procesar los asientos seleccionados
                 boletas_compradas = []
                 total = 0.0
                 todos_exitosos = True
-
                 for asiento_str in sillaSeperada:
                     numeroAsiento, letraAsiento = parsear_asiento(asiento_str)
-
                     mapaxEvento, exito = compraBoleta(id_ingreso, numeroAsiento, letraAsiento, id_evento, mapaxEvento)
-
                     if exito:
-                        # Calcular precio y servicio
                         precio_base = 0.0
                         zona_nombre = "Desconocida"
                         if numeroAsiento in precios_evento:
                             precio_base = precios_evento[numeroAsiento]["precio"]
                             zona_nombre = precios_evento[numeroAsiento]["zona"]
-
                         servicio = round(precio_base * 0.08, 2)
-
                         boleta = {
                             "silla"   : f"{numeroAsiento}{letraAsiento}",
                             "zona"    : zona_nombre,
@@ -734,8 +717,6 @@ try:
                     else:
                         print(f"  -> Asiento {numeroAsiento}{letraAsiento} NO disponible (ocupado o invalido)")
                         todos_exitosos = False
-
-                # Generar factura si hubo al menos una compra exitosa
                 if boletas_compradas:
                     print(f"\n--- Resumen de compra ---")
                     print(f"Asientos comprados: {len(boletas_compradas)}")
@@ -745,24 +726,18 @@ try:
                     print("\nNo se pudo completar ninguna compra.")
 
             elif tipo == "Concierto":
-                # --- COMPRA CONCIERTO ---
                 print("\nEntradas disponibles para Concierto")
                 mapaxEvento = cargar_mapa_concierto()
                 precios_evento = cargar_precios_concierto()
-
                 if not mapaxEvento:
                     print("ERROR: No se pudo cargar las zonas del concierto.")
                     continue
-
-                # Mostrar zonas disponibles
                 print("\nZonas disponibles:")
                 zonas_lista = list(mapaxEvento.keys())
                 for i, zona in enumerate(zonas_lista, start=1):
                     cupos = mapaxEvento[zona]
                     precio_zona = precios_evento[zona]["precio"] if zona in precios_evento else 0
                     print(f"  {i}. {zona}: {cupos} cupos disponibles - Precio: ${precio_zona:.2f}")
-
-                # Seleccionar zona
                 zona_elegida = ""
                 while True:
                     zona_elegida = input("\nIngrese el nombre de la zona (ej: VIP, General): ").strip()
@@ -770,8 +745,6 @@ try:
                         break
                     else:
                         print(f"Zona '{zona_elegida}' no existe. Las zonas son: {zonas_lista}")
-
-                # Cantidad de entradas
                 cantidadEntradas = 0
                 while True:
                     try:
@@ -784,19 +757,14 @@ try:
                     except ValueError as ve:
                         print(f"Error en los datos: {ve}")
                         continue
-
-                # Procesar compra de concierto
                 mapaxEvento, exito = compra_concierto(zona_elegida, cantidadEntradas, mapaxEvento, id_evento)
-
+                
                 if exito:
-                    # Calcular precio
                     precio_base = 0.0
                     if zona_elegida in precios_evento:
                         precio_base = precios_evento[zona_elegida]["precio"]
-
                     boletas_compradas = []
                     total = 0.0
-
                     for i in range(cantidadEntradas):
                         servicio = round(precio_base * 0.08, 2)
                         boleta = {
@@ -807,7 +775,6 @@ try:
                         }
                         boletas_compradas.append(boleta)
                         total += precio_base + servicio
-
                     print(f"\n--- Resumen de compra ---")
                     print(f"Zona: {zona_elegida}")
                     print(f"Entradas: {cantidadEntradas}")
@@ -819,9 +786,8 @@ try:
             else:
                 print("ERROR: Tipo de evento desconocido: " + tipo)
 
-
         elif opcionMenu == 3:
-            # Finalizar
+
             print("\nGracias por usar EVENT.CO. Hasta luego!")
             break
 

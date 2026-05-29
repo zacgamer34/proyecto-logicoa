@@ -1,0 +1,24 @@
+==================================================
+       REPORTE DE VENTAS - EVENT.CO
+==================================================
+
+ID Evento     : EVT-1001
+Tipo Evento   : Deporte
+--------------------------------------------------
+
+--- RESUMEN GENERAL ---
+Total de asientos      : 200
+Asientos vendidos      : 4
+Asientos disponibles   : 196
+Porcentaje ocupación   : 2.0%
+Ingresos totales       : $1296.00
+
+--- DETALLE POR ZONA ---
+
+Zona: VIP
+  Vendidos : 4
+  Ingresos : $1296.00
+
+==================================================
+        FIN DEL REPORTE
+==================================================
