@@ -540,6 +540,7 @@ try:
     mensaje_reporte=""
     mensajeBienvenida=""
     sillaSeperada=[]
+    total=0.0
     # Proceso
     mensajeBienvenida+="============================================"
     mensajeBienvenida+="          BIENVENIDO A EVENT.CO           "
@@ -702,7 +703,7 @@ try:
                             "servicio": servicio
                         }
                         boletas_compradas.append(boleta)
-                        total += precio_base + servicio
+                        total = precio_base + servicio
                         print(f"  -> Asiento {numeroAsiento}{letraAsiento} reservado con exito (Zona: {zona_nombre}, Precio: ${precio_base})")
                     else:
                         print(f"  -> Asiento {numeroAsiento}{letraAsiento} NO disponible (ocupado o invalido)")
@@ -764,7 +765,7 @@ try:
                             "servicio": servicio
                         }
                         boletas_compradas.append(boleta)
-                        total += precio_base + servicio
+                        total = precio_base + servicio
                     print(f"\n--- Resumen de compra ---")
                     print(f"Zona: {zona_elegida}")
                     print(f"Entradas: {cantidadEntradas}")
