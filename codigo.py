@@ -601,19 +601,9 @@ try:
                         )
                     # Guardar reporte en archivo
                     archivo_reporte = guardar_reporte_ventas(datos_reporte, evento_seleccionado["id"])
-                    
-                    mensaje_reporte+=f"\n--- REPORTE GENERADO ---\n"
-                    mensaje_reporte+=f"\nEvento: {evento_seleccionado['nombre']}\n"
-                    mensaje_reporte+=f"\nAsientos vendidos: {datos_reporte['asientos_vendidos']}\n"
-                    mensaje_reporte+=f"\nIngresos totales: ${datos_reporte['ingresos_totales']:.2f}\n"
-                    mensaje_reporte+=f"\nPorcentaje ocupación: {datos_reporte['porcentaje_occupacion']}%\n"
-                    mensaje_reporte+=f"\nReporte guardado en: {archivo_reporte}\n"
-
-                    print(mensaje_reporte)
                 
             elif opcionPanel==2:
                 break
-            
             
     nombre_cliente = clientes[id_ingreso]
     print(f"\nBienvenido/a, {nombre_cliente}")
