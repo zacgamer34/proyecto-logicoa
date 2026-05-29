@@ -14,7 +14,7 @@ El proyecto fue construido con  **cero dependencias externas**. Utiliza únicame
 -requiere cargar directamente los archivos asociados a los eventos y sean guardados en la carpeta nativa del programa de recursos (para una correcta ejecucion  porfavor trate que las rutas relativas o los nombres de los archivos concuerde con los que estan en las variables del programa ) seguiremos mejorando el programa con el tiempo , gracias por su comprencion estos archivos mas la carpeta seran agregados con una carpeta , almento de descargar el programa porfavor asegurese de descargar la carpeta de recursos
 en el programa. muchas gracias por leer esto
 
--y un agredecimiento espcial al profesor juan carlos rojas higuita por la oportunidad de desarrollar un sistema asi de complejo, fue todo un desafio profe , pero nos gusto muchas gracias por el apoyo y sus clases lo queremos.
+-y un agredecimiento espcial al profesor juan pablo rojas higuita por la oportunidad de desarrollar un sistema asi de complejo, fue todo un desafio profe , pero nos gusto muchas gracias por el apoyo y sus clases lo queremos.
 
 ---------------------------------------
 desarrolladores:
